@@ -14,5 +14,12 @@ received_message = connection.recv(buffer_size)
 
 print("Client says: {}".format(received_message.decode()))
 
-connection.sendall("message received".encode('utf8'))
+# Not the best way, eh?
+# maybe sending length is better, but this works.
+# unless some idiot sends this && it happens to be at the
+# end of a 16 byte string being sent... v. unlikely.
+end_code = "$MeSSaGeEnD!"
+
+msg = 'message, "{}" received.'.format(received_message.decode()).encode('utf8')
+connection.sendall(msg+ end_code.encode('utf8'))
 
