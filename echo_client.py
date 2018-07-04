@@ -13,13 +13,15 @@ def client(msg, log_buffer=sys.stderr):
     # you can use this variable to accumulate the entire message received back
     # from the server
     chunk = ''
+    end_code = "$MeSSaGeEnD!"
 
     # this try/finally block exists purely to allow us to close the socket
     # when we are finished with it
     try:
-        print('sending "{0}"'.format(msg + message_end), file=log_buffer)
+        print('sending "{0}"'.format(msg), file=log_buffer)
         # TODO: send your message to the server here.
-        sock.sendall(my_message.encode('utf-8'))
+        msg = msg + end_code
+        sock.sendall(msg.encode('utf-8'))
 
         # TODO: the server should be sending you back your message as a series
         #       of 16-byte chserverunks. Accumulate the chunks you get to build the
@@ -29,7 +31,7 @@ def client(msg, log_buffer=sys.stderr):
         #       Log each chunk you receive.  Use the print statement below to
         #       do it. This will help in debugging problems
 
-        end_code = "$MeSSaGeEnD!" # lol.
+
         message_over = False
 
         chunk = ''

@@ -31,7 +31,7 @@ def server(log_buffer=sys.stderr):
         while True:
             print('waiting for a connection', file=log_buffer)
 
-            # TODO: make a new socket when a client connects, call it 'conn',
+            #       make a new socket when a client connects, call it 'conn',
             #       at the same time you should be able to get the address of
             #       the client so we can report it below.  Replace the
             #       following line with your code. It is only here to prevent
@@ -46,34 +46,27 @@ def server(log_buffer=sys.stderr):
                 buffer_size = 16
                 message_over = False
                 end_code = "$MeSSaGeEnD!"
-                while True:
-                    # TODO: receive 16 bytes of data from the client. Store
-                    #       the data you receive as 'data'.  Replace the
-                    #       following line with your code.  It's only here as
-                    #       a placeholder to prevent an error in string
-                    #       formatting
-                    received_message = ''
-                    while not message_over:
-                        received_message += sock.recv(16).decode()
-                        # probably not the right answer, but an answer...
-                        message_over = received_message.endswith(end_code)
-                        received_message = connection.recv(buffer_size)
+                #       receive 16 bytes of data from the client. Store
+                #       the data you receive as 'data'.  Replace the
+                #       following line with your code.  It's only here as
+                #       a placeholder to prevent an error in string
+                #       formatting
+                data = ''
+                while not message_over:
+                    received_message = conn.recv(16).decode()
+                    print(received_message)
+                    data += received_message
+                    # probably not the right answer, but an answer...
+                    message_over = data.endswith(end_code)
 
-                    print('received "{0}"'.format(received_message))
-                    
-                    # TODO: Send the data you received back to the client, log
-                    # the fact using the print statement here.  It will help in
-                    # debugging problems.
-                    print('sent "{0}"'.format(data.decode('utf8')))
-                    
-                    # TODO: Check here to see whether you have received the end
-                    # of the message. If you have, then break from the `while True`
-                    # loop.
-                    # 
-                    # Figuring out whether or not you have received the end of the
-                    # message is a trick we learned in the lesson: if you don't
-                    # remember then ask your classmates or instructor for a clue.
-                    # :)
+                data.strip(end_code)
+                print("Final message:", data)
+                # TODO: Send the data you received back to the client, log
+                # the fact using the print statement here.  It will help in
+                # debugging problems.
+                # while True:
+                #     print('sent "{0}"'.format(data.decode('utf8')))
+
 
             finally:
                 # TODO: When the inner loop exits, this 'finally' clause will
@@ -82,7 +75,7 @@ def server(log_buffer=sys.stderr):
                 print(
                     'echo complete, client connection closed', file=log_buffer
                 )
-
+                sock.close()
     except KeyboardInterrupt:
         # TODO: Use the python KeyboardInterrupt exception as a signal to
         #       close the server socket and exit from the server function.
